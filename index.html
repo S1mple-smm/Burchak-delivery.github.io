@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Delivery</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Order Your Favourite Food!</h1>
+            <p>Hurry up! Order food now and get 20% off</p>
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Search Any Food">
+                <button onclick="searchFood()">Search</button>
+            </div>
+        </header>
+
+        <nav class="categories">
+            <button class="category active" onclick="filterCategory('all')">All</button>
+            <button class="category" onclick="filterCategory('drink')">Drink</button>
+            <button class="category" onclick="filterCategory('burger')">Burger</button>
+            <button class="category" onclick="filterCategory('Hot Dog')">Hot Dog</button>
+            <button class="category" onclick="filterCategory('combo')">Combo</button>
+        </nav>
+
+        <main class="main-content">
+            <div class="food-card" data-category="burger">
+                <img src="\img/burger.jpg" alt="Burger">
+                <h2>Cheese Bust Burger</h2>
+                <p>$10.67</p>
+                <button class="add-to-cart" onclick="addToCart('Cheese Bust Burger', 10.67)">Add to Cart</button>
+                <button class="details" onclick="showDetails('Cheese Bust Burger')">More Details</button>
+            </div>
+            <div class="food-card" data-category="Hot Dog">
+                <img src="\img/hot dog.jpg" alt="hot Dog">
+                <h2>Hot Dog</h2>
+                <p>$5.67</p>
+                <button class="add-to-cart" onclick="addToCart('Hot Dog', 5.67)">Add to Cart</button>
+                <button class="details" onclick="showDetails('Hot Dog')">More Details</button>
+            </div>
+            <!-- Добавьте больше карточек товаров с соответствующими категориями -->
+        </main>
+
+        <aside class="cart">
+            <h2>Shopping Cart</h2>
+            <ul id="cart-items"></ul>
+            <p id="total-price">Total: $0.00</p>
+            <button class="checkout" onclick="checkout()">Checkout</button>
+        </aside>
+
+    </div>
+    
+<!-- Модальное окно для отображения деталей продукта -->
+<div id="product-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-button" onclick="closeModal()">&times;</span>
+        <img id="modal-image" src="" alt="Product Image">
+        <h2 id="modal-title">Product Name</h2>
+        <p id="modal-description">Product Description</p>
+        <p id="modal-price">$0.00</p>
+    </div>
+</div>
+
+<!-- Модальное окно для подтверждения заказа и оплаты -->
+<div id="payment-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-button" onclick="closePaymentModal()">&times;</span>
+        <h2>Оплата заказа</h2>
+        <p>Ваш заказ готов к оплате. Пожалуйста, введите информацию для оплаты.</p>
+        <input type="text" id="card-number" placeholder="Номер карты" class="input-field">
+        <input type="text" id="card-holder" placeholder="Имя владельца карты" class="input-field">
+        <input type="text" id="expiry-date" placeholder="Срок действия (MM/YY)" class="input-field">
+        <input type="text" id="cvv" placeholder="CVV" class="input-field">
+        <button class="confirm-payment" onclick="processPayment()">Оплатить</button>
+    </div>
+</div>
+
+
+    <script src="script.js"></script>
+</body>
+</html>
