@@ -86,6 +86,13 @@ const products = [
         image: '\img/coffee.jpg',
         description: 'Original cofee with milk'
     },
+        {
+        name: 'Coffee',
+        price: 5.67,
+        category: 'drink',
+        image: '\img/coffee.jpg',
+        description: 'Original cofee with milk'
+    },
     // Добавьте больше продуктов по аналогии
 ];
 
