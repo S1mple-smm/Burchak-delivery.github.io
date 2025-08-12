@@ -1,83 +1,779 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Food Delivery</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accounting System</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* Основные стили */
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background: #f0f2f5;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+      background: linear-gradient(90deg, #2c3e50, #34495e);
+      color: white;
+    }
+    /* Стили для вкладок */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      background: #34495e;
+      border-bottom: 4px solid #1abc9c;
+      padding: 10px 0;
+    }
+    .tabs button {
+      padding: 15px 40px;
+      margin: 0 5px;
+      background: none;
+      border: none;
+      color: #ecf0f1;
+      font-size: 17px;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s;
+    }
+    .tabs button:hover {
+      background: #1abc9c;
+      color: white;
+    }
+    .tabs button.active {
+      background: #1abc9c;
+      color: white;
+      border-bottom: 4px solid #16a085;
+    }
+    /* Стили для контента вкладок */
+    .tab-content {
+      display: none;
+      padding: 20px;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .container {
+      max-width: 900px;
+      margin: 32px auto;
+      background: white;
+      padding: 36px 28px 32px 28px;
+      border-radius: 24px;
+      box-shadow: 0 5px 24px rgba(0, 0, 0, 0.10);
+      min-width: 320px;
+    }
+    /* Общие стили для форм и таблиц */
+    label, input, select, button {
+      font-size: 17px;
+    }
+    label {
+      margin: 14px 0 8px 0;
+      font-weight: 500;
+      display: block;
+    }
+    input, select {
+      padding: 14px 12px;
+      border: 1.5px solid #bfc9d1;
+      border-radius: 10px;
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+      background: #f8fafc;
+      transition: border 0.2s;
+    }
+    input:focus, select:focus {
+      border: 1.5px solid #3498db;
+      outline: none;
+      background: #fff;
+    }
+    button {
+      padding: 14px 28px;
+      border: none;
+      border-radius: 10px;
+      background-color: #3498db;
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 600;
+      transition: background 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: 0 2px 8px rgba(44,62,80,0.07);
+    }
+    button:hover {
+      background-color: #2980b9;
+      box-shadow: 0 4px 16px rgba(44,62,80,0.13);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 28px;
+      font-size: 1.05rem;
+      background: #f8fafc;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(44,62,80,0.06);
+    }
+    th, td {
+      border: 1px solid #e0e6ed;
+      padding: 14px 8px;
+      text-align: center;
+    }
+    th {
+      background: #ecf0f1;
+      font-weight: 700;
+      font-size: 1.08rem;
+    }
+    tr:nth-child(even) {
+      background: #f3f6fa;
+    }
+    tr:hover {
+      background: #eaf6fb;
+      transition: background 0.2s;
+    }
+    .delete-btn {
+      background-color: #e74c3c;
+      color: white;
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: none;
+      transition: background 0.2s;
+    }
+    .delete-btn:hover {
+      background-color: #c0392b;
+    }
+    .indicator {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      margin: 0 auto;
+      box-shadow: 0 1px 3px rgba(44,62,80,0.10);
+    }
+    .green { background-color: #2ecc71; }
+    .orange { background-color: #f39c12; }
+    .red { background-color: #e74c3c; }
+    /* Блок для поиска в Складе – перемещён вверх */
+    .search-box {
+      margin: 18px 0 28px;
+    }
+    /* Блок для размещения полей в строку (Учёт и фильтры дохода) */
+    .inline-group {
+      display: flex;
+      gap: 24px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    .inline-group label {
+      flex: 1;
+      min-width: 180px;
+    }
+    /* Блок для чекбоксов (Аренда) */
+    .checkbox-group {
+      display: flex;
+      flex-direction: row;
+      gap: 32px;
+      align-items: flex-start;
+      margin: 18px 0 10px 0;
+      padding-left: 2px;
+    }
+    .checkbox-group label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0;
+      font-weight: 500;
+      cursor: pointer;
+      user-select: none;
+    }
+    .checkbox-group input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: #3498db;
+      margin: 0 4px 0 0;
+      cursor: pointer;
+    }
+    /* Стили для блоков расчёта дохода */
+    .income-calc-block {
+      margin-top: 32px;
+      padding: 18px 18px 10px 18px;
+      border: 1.5px solid #bfc9d1;
+      border-radius: 12px;
+      background: #f8fafc;
+      box-shadow: 0 1px 4px rgba(44,62,80,0.06);
+    }
+    .income-calc-block h3 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 1.18rem;
+      color: #2980b9;
+      font-weight: 600;
+    }
+    @media (max-width: 700px) {
+      .container {
+        padding: 12px 4vw 18px 4vw;
+        min-width: unset;
+      }
+      .inline-group {
+        flex-direction: column;
+        gap: 0;
+      }
+      table, th, td {
+        font-size: 0.98rem;
+      }
+    }
+  </style>
 </head>
 <body>
+  <h1>Accounting System</h1>
+  <div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('accounting')">Accounting</button>
+  <button class="tab-btn" onclick="switchTab('rental')">Rental</button>
+  <button class="tab-btn" onclick="switchTab('warehouse')">Warehouse</button>
+  </div>
+
+  <!-- Tab: Accounting -->
+  <div id="accounting" class="tab-content active">
     <div class="container">
-        <header class="header">
-            <h1>Order Your Favourite Food!</h1>
-            <p>Hurry up! Order food now and get 20% off</p>
-            <div class="search-bar">
-                <input type="text" id="search-input" placeholder="Search Any Food">
-                <button onclick="searchFood()">Search</button>
-            </div>
-        </header>
+  <h2>Income and Expense Accounting</h2>
+      <form id="entryForm">
+        <div class="inline-group">
+          <label>Type:
+            <select id="type">
+              <option>Sale</option>
+              <option>Rental</option>
+              <option>Repair</option>
+            </select>
+          </label>
+          <label>Income/Expense:
+            <select id="flow">
+              <option value="income">Income</option>
+              <option value="expense">Expense</option>
+            </select>
+          </label>
+        </div>
+        <label>Transaction Date:
+          <input type="date" id="entryDate" required>
+        </label>
+        <!-- For sales, user specifies the part name with size in the format "Part (Size)" -->
+        <label>Name:
+          <input type="text" id="name" placeholder="For example: Product A (13)" required>
+        </label>
+        <label>Quantity:
+          <input type="number" id="quantity" min="1" value="1">
+        </label>
+        <label>Amount:
+          <input type="number" id="amount" required>
+        </label>
+        <button type="submit">Add Transaction</button>
+      </form>
 
-        <nav class="categories">
-            <button class="category active" onclick="filterCategory('all')">All</button>
-            <button class="category" onclick="filterCategory('drink')">Drink</button>
-            <button class="category" onclick="filterCategory('burger')">Burger</button>
-            <button class="category" onclick="filterCategory('Hot Dog')">Hot Dog</button>
-            <button class="category" onclick="filterCategory('combo')">Combo</button>
-        </nav>
+      <!-- Income calculation blocks -->
+      <div id="incomeCalcDay" class="income-calc-block">
+        <h3>Income for Selected Day</h3>
+        <select id="filterDay"></select>
+        <button id="calcIncomeDayBtn" style="margin-top: 10px;">Calculate</button>
+        <p>Income for the day: <span id="incomeDayResult">0</span></p>
+      </div>
+      <div id="incomeCalcMonth" class="income-calc-block">
+        <h3>Income for Selected Month</h3>
+        <select id="filterMonth"></select>
+        <button id="calcIncomeMonthBtn" style="margin-top: 10px;">Calculate</button>
+        <p>Income for the month: <span id="incomeMonthResult">0</span></p>
+      </div>
+      <div id="incomeCalcYear" class="income-calc-block">
+        <h3>Income for Selected Year</h3>
+        <select id="filterYear"></select>
+        <button id="calcIncomeYearBtn" style="margin-top: 10px;">Calculate</button>
+        <p>Income for the year: <span id="incomeYearResult">0</span></p>
+      </div>
 
-        <main class="main-content">
-            <div class="food-card" data-category="burger">
-                <img src="\img/burger.jpg" alt="Burger">
-                <h2>Cheese Bust Burger</h2>
-                <p>$10.67</p>
-                <button class="add-to-cart" onclick="addToCart('Cheese Bust Burger', 10.67)">Add to Cart</button>
-                <button class="details" onclick="showDetails('Cheese Bust Burger')">More Details</button>
-            </div>
-            <div class="food-card" data-category="Hot Dog">
-                <img src="\img/hot dog.jpg" alt="hot Dog">
-                <h2>Hot Dog</h2>
-                <p>$5.67</p>
-                <button class="add-to-cart" onclick="addToCart('Hot Dog', 5.67)">Add to Cart</button>
-                <button class="details" onclick="showDetails('Hot Dog')">More Details</button>
-            </div>
-            <!-- Добавьте больше карточек товаров с соответствующими категориями -->
-        </main>
-
-        <aside class="cart">
-            <h2>Shopping Cart</h2>
-            <ul id="cart-items"></ul>
-            <p id="total-price">Total: $0.00</p>
-            <button class="checkout" onclick="checkout()">Checkout</button>
-        </aside>
-
+      <!-- Table with entries -->
+      <table>
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Flow</th>
+            <th>Date</th>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Amount</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody id="entryTable"></tbody>
+      </table>
     </div>
-    
-<!-- Модальное окно для отображения деталей продукта -->
-<div id="product-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-button" onclick="closeModal()">&times;</span>
-        <img id="modal-image" src="" alt="Product Image">
-        <h2 id="modal-title">Product Name</h2>
-        <p id="modal-description">Product Description</p>
-        <p id="modal-price">$0.00</p>
+  </div>
+
+  <!-- Tab: Rental -->
+  <div id="rental" class="tab-content">
+    <div class="container">
+  <h2>Rental</h2>
+      <form id="rentalForm">
+        <label>First Name:
+          <input type="text" id="rentalName" required>
+        </label>
+        <label>Last Name:
+          <input type="text" id="rentalSurname" required>
+        </label>
+        <label>Phone:
+          <input type="text" id="rentalPhone" required>
+        </label>
+        <label>Passport Series:
+          <input type="text" id="rentalPassport" required>
+        </label>
+        <label>Date of Birth:
+          <input type="date" id="rentalBirth" required>
+        </label>
+        <label>Date Given:
+          <input type="date" id="rentalBikeGiven" required>
+        </label>
+        <label>Rental Period:
+          <input type="number" id="rentalDuration" required>
+          <select id="rentalUnit">
+            <option value="minutes">Minutes</option>
+            <option value="hours">Hours</option>
+            <option value="days">Days</option>
+          </select>
+        </label>
+        <label>Rental Payment Date:
+          <input type="date" id="rentalPaymentDate">
+        </label>
+        <label>Rental Amount:
+          <input type="number" id="rentalAmount" required>
+        </label>
+        <div class="checkbox-group">
+          <label><input type="checkbox" id="rentalPaid"> Payment Received</label>
+          <label><input type="checkbox" id="rentalActive" checked> Rental Active</label>
+        </div>
+        <button type="submit">Save Rental</button>
+      </form>
+
+      <table id="rentalTable">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Phone</th>
+            <th>Passport</th>
+            <th>Date Given</th>
+            <th>Period</th>
+            <th>Rental Amount</th>
+            <th>Payment Date</th>
+            <th>Paid</th>
+            <th>Active</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
     </div>
-</div>
+  </div>
 
-<!-- Модальное окно для подтверждения заказа и оплаты -->
-<div id="payment-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-button" onclick="closePaymentModal()">&times;</span>
-        <h2>Оплата заказа</h2>
-        <p>Ваш заказ готов к оплате. Пожалуйста, введите информацию для оплаты.</p>
-        <input type="text" id="card-number" placeholder="Номер карты" class="input-field">
-        <input type="text" id="card-holder" placeholder="Имя владельца карты" class="input-field">
-        <input type="text" id="expiry-date" placeholder="Срок действия (MM/YY)" class="input-field">
-        <input type="text" id="cvv" placeholder="CVV" class="input-field">
-        <button class="confirm-payment" onclick="processPayment()">Оплатить</button>
+  <!-- Tab: Warehouse -->
+  <div id="warehouse" class="tab-content">
+    <div class="container">
+  <h2>Warehouse</h2>
+      <!-- Search block moved up -->
+      <div class="search-box">
+        <label>Search:
+          <input type="text" id="searchInput" placeholder="Enter name...">
+        </label>
+      </div>
+      <form id="stockForm">
+        <label>Name:
+          <input type="text" id="itemName" required>
+        </label>
+        <label>Quantity:
+          <input type="number" id="itemQty" required>
+        </label>
+        <label>Size:
+          <input type="text" id="itemSize">
+        </label>
+        <label>Additional Info:
+          <input type="text" id="itemNote">
+        </label>
+        <button type="submit">Add to Warehouse</button>
+      </form>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Indicator</th>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Size</th>
+            <th>Additional Info</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody id="stockTable"></tbody>
+      </table>
     </div>
-</div>
+  </div>
 
+  <!-- Скрипт для переключения вкладок -->
+  <script>
+    const tabs = document.querySelectorAll('.tab-btn');
+    const contents = document.querySelectorAll('.tab-content');
+    function switchTab(tabId) {
+      contents.forEach(c => c.classList.remove('active'));
+      tabs.forEach(t => t.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      document.querySelector(`.tab-btn[onclick*="${tabId}"]`).classList.add('active');
+    }
+  </script>
 
-    <script src="script.js"></script>
+  <!-- Функционал для Учёта доходов и расходов -->
+  <script>
+    let accountingEntries = JSON.parse(localStorage.getItem('accountingEntries')) || [];
+    const entryForm = document.getElementById('entryForm');
+    const entryTable = document.getElementById('entryTable');
+
+    // Установка текущей даты по умолчанию для поля "Дата операции"
+    document.addEventListener("DOMContentLoaded", function() {
+      const today = new Date().toISOString().substr(0, 10);
+      document.getElementById('entryDate').value = today;
+      populateDateFilters();
+    });
+
+    // Функция для разбора названия продажи, ожидается формат "Название (Размер)"
+    function parseSaleName(saleName) {
+      const regex = /(.*)\s*\(([^)]+)\)/;
+      const match = saleName.match(regex);
+      if (match) {
+        return { baseName: match[1].trim(), size: match[2].trim() };
+      }
+      return null;
+    }
+
+    entryForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const entry = {
+        type: document.getElementById('type').value,
+        flow: document.getElementById('flow').value,
+        date: document.getElementById('entryDate').value,
+        name: document.getElementById('name').value,
+        quantity: parseInt(document.getElementById('quantity').value),
+        amount: parseFloat(document.getElementById('amount').value)
+      };
+      accountingEntries.push(entry);
+      localStorage.setItem('accountingEntries', JSON.stringify(accountingEntries));
+      
+      // Если тип "Продажа", пробуем списать с склада с учётом названия и размера
+      if (entry.type === "Продажа") {
+        const parsed = parseSaleName(entry.name);
+        if (parsed) {
+          for (let i = 0; i < stockItems.length; i++) {
+            if (stockItems[i].name.toLowerCase() === parsed.baseName.toLowerCase() &&
+                stockItems[i].size.toLowerCase() === parsed.size.toLowerCase()) {
+              stockItems[i].qty = Math.max(0, stockItems[i].qty - entry.quantity);
+              break;
+            }
+          }
+        } else {
+          // Если формат не соответствует – пробуем найти по полному названию
+          for (let i = 0; i < stockItems.length; i++) {
+            if (stockItems[i].name.toLowerCase() === entry.name.toLowerCase()) {
+              stockItems[i].qty = Math.max(0, stockItems[i].qty - entry.quantity);
+              break;
+            }
+          }
+        }
+        localStorage.setItem('stockItems', JSON.stringify(stockItems));
+        renderStock();
+      }
+      
+      entryForm.reset();
+      document.getElementById('entryDate').value = new Date().toISOString().substr(0, 10);
+      renderAccounting();
+      populateDateFilters();
+    });
+
+    function renderAccounting() {
+      entryTable.innerHTML = '';
+      accountingEntries.forEach((item, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${item.type}</td>
+          <td>${item.flow === 'income' ? 'Доход' : 'Расход'}</td>
+          <td>${item.date}</td>
+          <td>${item.name}</td>
+          <td>${item.quantity}</td>
+          <td>${item.amount}</td>
+          <td><button class="delete-btn" onclick="deleteAccounting(${index})">Удалить</button></td>
+        `;
+        entryTable.appendChild(row);
+      });
+    }
+    function deleteAccounting(index) {
+      if (confirm("Удалить запись?")) {
+        accountingEntries.splice(index, 1);
+        localStorage.setItem('accountingEntries', JSON.stringify(accountingEntries));
+        renderAccounting();
+        populateDateFilters();
+      }
+    }
+    renderAccounting();
+
+    // Функция расчёта дохода для выбранного дня
+    document.getElementById('calcIncomeDayBtn').addEventListener('click', function() {
+      const selectedDay = parseInt(document.getElementById('filterDay').value);
+      let totalIncome = 0;
+      // Учётные записи
+      accountingEntries.forEach(entry => {
+        const d = new Date(entry.date);
+        if (d.getDate() === selectedDay) {
+          totalIncome += (entry.flow === 'income' ? entry.amount : -entry.amount);
+        }
+      });
+      // Аренда: учитываем, если оплачено и дата оплаты установлена
+      rentalEntries.forEach(rental => {
+        if (rental.paid && rental.paymentDate) {
+          const d = new Date(rental.paymentDate);
+          if (d.getDate() === selectedDay) {
+            totalIncome += parseFloat(rental.rentalAmount || 0);
+          }
+        }
+      });
+      document.getElementById('incomeDayResult').innerText = totalIncome;
+    });
+
+    // Функция расчёта дохода для выбранного месяца
+    document.getElementById('calcIncomeMonthBtn').addEventListener('click', function() {
+      const selectedMonth = parseInt(document.getElementById('filterMonth').value);
+      let totalIncome = 0;
+      accountingEntries.forEach(entry => {
+        const d = new Date(entry.date);
+        if ((d.getMonth() + 1) === selectedMonth) {
+          totalIncome += (entry.flow === 'income' ? entry.amount : -entry.amount);
+        }
+      });
+      rentalEntries.forEach(rental => {
+        if (rental.paid && rental.paymentDate) {
+          const d = new Date(rental.paymentDate);
+          if ((d.getMonth() + 1) === selectedMonth) {
+            totalIncome += parseFloat(rental.rentalAmount || 0);
+          }
+        }
+      });
+      document.getElementById('incomeMonthResult').innerText = totalIncome;
+    });
+
+    // Функция расчёта дохода для выбранного года
+    document.getElementById('calcIncomeYearBtn').addEventListener('click', function() {
+      const selectedYear = parseInt(document.getElementById('filterYear').value);
+      let totalIncome = 0;
+      accountingEntries.forEach(entry => {
+        const d = new Date(entry.date);
+        if (d.getFullYear() === selectedYear) {
+          totalIncome += (entry.flow === 'income' ? entry.amount : -entry.amount);
+        }
+      });
+      rentalEntries.forEach(rental => {
+        if (rental.paid && rental.paymentDate) {
+          const d = new Date(rental.paymentDate);
+          if (d.getFullYear() === selectedYear) {
+            totalIncome += parseFloat(rental.rentalAmount || 0);
+          }
+        }
+      });
+      document.getElementById('incomeYearResult').innerText = totalIncome;
+    });
+
+    // Функция заполнения фильтров (день, месяц, год) на основе дат записей
+    function populateDateFilters() {
+      const daysSet = new Set();
+      const monthsSet = new Set();
+      const yearsSet = new Set();
+      // Учётные записи
+      accountingEntries.forEach(entry => {
+        if (entry.date) {
+          const d = new Date(entry.date);
+          daysSet.add(d.getDate());
+          monthsSet.add(d.getMonth() + 1);
+          yearsSet.add(d.getFullYear());
+        }
+      });
+      // Аренда (если указана дата оплаты)
+      rentalEntries.forEach(rental => {
+        if (rental.paymentDate) {
+          const d = new Date(rental.paymentDate);
+          daysSet.add(d.getDate());
+          monthsSet.add(d.getMonth() + 1);
+          yearsSet.add(d.getFullYear());
+        }
+      });
+      // Заполнение фильтров
+      const filterDay = document.getElementById('filterDay');
+      const filterMonth = document.getElementById('filterMonth');
+      const filterYear = document.getElementById('filterYear');
+      
+      filterDay.innerHTML = '';
+      filterMonth.innerHTML = '';
+      filterYear.innerHTML = '';
+      
+      // Сортировка и добавление опций
+      Array.from(daysSet).sort((a, b) => a - b).forEach(day => {
+        const option = document.createElement('option');
+        option.value = day;
+        option.innerText = day;
+        filterDay.appendChild(option);
+      });
+      Array.from(monthsSet).sort((a, b) => a - b).forEach(month => {
+        const option = document.createElement('option');
+        option.value = month;
+        option.innerText = month;
+        filterMonth.appendChild(option);
+      });
+      Array.from(yearsSet).sort((a, b) => a - b).forEach(year => {
+        const option = document.createElement('option');
+        option.value = year;
+        option.innerText = year;
+        filterYear.appendChild(option);
+      });
+    }
+  </script>
+
+  <!-- Функционал для Учёта аренды -->
+  <script>
+    let rentalEntries = JSON.parse(localStorage.getItem('rentalEntries')) || [];
+    const rentalForm = document.getElementById('rentalForm');
+    const rentalTableBody = document.querySelector('#rentalTable tbody');
+
+    rentalForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const rental = {
+        firstName: document.getElementById('rentalName').value,
+        lastName: document.getElementById('rentalSurname').value,
+        phone: document.getElementById('rentalPhone').value,
+        passport: document.getElementById('rentalPassport').value,
+        birth: document.getElementById('rentalBirth').value,
+        bikeGiven: document.getElementById('rentalBikeGiven').value,
+        duration: document.getElementById('rentalDuration').value,
+        durationUnit: document.getElementById('rentalUnit').value,
+        paymentDate: document.getElementById('rentalPaymentDate').value,
+        rentalAmount: document.getElementById('rentalAmount').value,
+        paid: document.getElementById('rentalPaid').checked,
+        active: document.getElementById('rentalActive').checked
+      };
+      rentalEntries.push(rental);
+      localStorage.setItem('rentalEntries', JSON.stringify(rentalEntries));
+      rentalForm.reset();
+      renderRental();
+      populateDateFilters();
+    });
+
+    function renderRental() {
+      // Сортировка по дате оплаты (записи без даты – в конец)
+      rentalEntries.sort((a, b) => {
+        const dateA = a.paymentDate ? new Date(a.paymentDate) : new Date(8640000000000000);
+        const dateB = b.paymentDate ? new Date(b.paymentDate) : new Date(8640000000000000);
+        return dateA - dateB;
+      });
+      rentalTableBody.innerHTML = '';
+      rentalEntries.forEach((item, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${item.firstName}</td>
+          <td>${item.lastName}</td>
+          <td>${item.phone}</td>
+          <td>${item.passport}</td>
+          <td>${item.bikeGiven}</td>
+          <td>${item.duration} ${item.durationUnit}</td>
+          <td>${item.rentalAmount ? item.rentalAmount : 0}</td>
+          <td>${item.paymentDate ? item.paymentDate : ''}</td>
+          <td><input type="checkbox" onchange="toggleRentalPaid(${index}, this)" ${item.paid ? 'checked' : ''}></td>
+          <td>${item.active ? 'Да' : 'Нет'}</td>
+          <td><button class="delete-btn" onclick="deleteRental(${index})">Удалить</button></td>
+        `;
+        rentalTableBody.appendChild(row);
+      });
+    }
+    function deleteRental(index) {
+      if (confirm("Удалить запись?")) {
+        rentalEntries.splice(index, 1);
+        localStorage.setItem('rentalEntries', JSON.stringify(rentalEntries));
+        renderRental();
+        populateDateFilters();
+      }
+    }
+    // Обновление статуса "Оплачено" по клику на чекбокс
+    function toggleRentalPaid(index, checkbox) {
+      rentalEntries[index].paid = checkbox.checked;
+      localStorage.setItem('rentalEntries', JSON.stringify(rentalEntries));
+      renderRental();
+      populateDateFilters();
+    }
+    renderRental();
+
+  </script>
+
+  <!-- Функционал для Состава склада -->
+  <script>
+    let stockItems = JSON.parse(localStorage.getItem('stockItems')) || [];
+    const stockForm = document.getElementById('stockForm');
+    const stockTable = document.getElementById('stockTable');
+    const searchInput = document.getElementById('searchInput');
+
+    stockForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const item = {
+        name: document.getElementById('itemName').value,
+        qty: parseInt(document.getElementById('itemQty').value),
+        size: document.getElementById('itemSize').value,
+        note: document.getElementById('itemNote').value
+      };
+      stockItems.push(item);
+      localStorage.setItem('stockItems', JSON.stringify(stockItems));
+      stockForm.reset();
+      renderStock();
+      populateDateFilters();
+    });
+
+    // Логика индикаторов: 0 → красный, меньше 12 → оранжевый, от 12 и выше → зелёный
+    function getIndicator(qty) {
+      if (qty === 0) return 'red';
+      if (qty < 12) return 'orange';
+      return 'green';
+    }
+
+    function renderStock() {
+      const filter = searchInput.value.toLowerCase();
+      stockTable.innerHTML = '';
+      stockItems
+        .filter(item => item.name.toLowerCase().includes(filter))
+        .sort((a, b) => a.qty - b.qty)
+        .forEach((item, index) => {
+          const row = document.createElement('tr');
+          const indicator = getIndicator(item.qty);
+          row.innerHTML = `
+            <td><span class="indicator ${indicator}"></span></td>
+            <td>${item.name}</td>
+            <td>${item.qty}</td>
+            <td>${item.size}</td>
+            <td>${item.note}</td>
+            <td><button class="delete-btn" onclick="deleteStock(${index})">Удалить</button></td>
+          `;
+          stockTable.appendChild(row);
+        });
+    }
+
+    function deleteStock(index) {
+      if (confirm("Удалить запись?")) {
+        stockItems.splice(index, 1);
+        localStorage.setItem('stockItems', JSON.stringify(stockItems));
+        renderStock();
+        populateDateFilters();
+      }
+    }
+
+    searchInput.addEventListener('input', renderStock);
+    renderStock();
+  </script>
 </body>
 </html>
