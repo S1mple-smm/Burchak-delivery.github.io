@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Accounting System</title>
+  <title>Система учёта</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     /* Основные стили */
@@ -228,80 +228,80 @@
   </style>
 </head>
 <body>
-  <h1>Accounting System</h1>
+  <h1>Система учёта</h1>
   <div class="tabs">
-  <button class="tab-btn active" onclick="switchTab('accounting')">Accounting</button>
-  <button class="tab-btn" onclick="switchTab('rental')">Rental</button>
-  <button class="tab-btn" onclick="switchTab('warehouse')">Warehouse</button>
+  <button class="tab-btn active" onclick="switchTab('accounting')">Учёт</button>
+  <button class="tab-btn" onclick="switchTab('rental')">Аренда</button>
+  <button class="tab-btn" onclick="switchTab('warehouse')">Склад</button>
   </div>
 
   <!-- Tab: Accounting -->
   <div id="accounting" class="tab-content active">
     <div class="container">
-  <h2>Income and Expense Accounting</h2>
+  <h2>Учёт доходов и расходов</h2>
       <form id="entryForm">
         <div class="inline-group">
-          <label>Type:
+          <label>Тип:
             <select id="type">
-              <option>Sale</option>
-              <option>Rental</option>
-              <option>Repair</option>
+              <option>Продажа</option>
+              <option>Аренда</option>
+              <option>Ремонт</option>
             </select>
           </label>
-          <label>Income/Expense:
+          <label>Доход/Расход:
             <select id="flow">
-              <option value="income">Income</option>
-              <option value="expense">Expense</option>
+              <option value="income">Доход</option>
+              <option value="expense">Расход</option>
             </select>
           </label>
         </div>
-        <label>Transaction Date:
+        <label>Дата операции:
           <input type="date" id="entryDate" required>
         </label>
         <!-- For sales, user specifies the part name with size in the format "Part (Size)" -->
-        <label>Name:
-          <input type="text" id="name" placeholder="For example: Product A (13)" required>
+        <label>Название:
+          <input type="text" id="name" placeholder="Например: Товар A (13)" required>
         </label>
-        <label>Quantity:
+        <label>Количество:
           <input type="number" id="quantity" min="1" value="1">
         </label>
-        <label>Amount:
+        <label>Сумма:
           <input type="number" id="amount" required>
         </label>
-        <button type="submit">Add Transaction</button>
+        <button type="submit">Добавить операцию</button>
       </form>
 
       <!-- Income calculation blocks -->
       <div id="incomeCalcDay" class="income-calc-block">
-        <h3>Income for Selected Day</h3>
+        <h3>Доход за выбранный день</h3>
         <select id="filterDay"></select>
-        <button id="calcIncomeDayBtn" style="margin-top: 10px;">Calculate</button>
-        <p>Income for the day: <span id="incomeDayResult">0</span></p>
+        <button id="calcIncomeDayBtn" style="margin-top: 10px;">Рассчитать</button>
+        <p>Доход за день: <span id="incomeDayResult">0</span></p>
       </div>
       <div id="incomeCalcMonth" class="income-calc-block">
-        <h3>Income for Selected Month</h3>
+        <h3>Доход за выбранный месяц</h3>
         <select id="filterMonth"></select>
-        <button id="calcIncomeMonthBtn" style="margin-top: 10px;">Calculate</button>
-        <p>Income for the month: <span id="incomeMonthResult">0</span></p>
+        <button id="calcIncomeMonthBtn" style="margin-top: 10px;">Рассчитать</button>
+        <p>Доход за месяц: <span id="incomeMonthResult">0</span></p>
       </div>
       <div id="incomeCalcYear" class="income-calc-block">
-        <h3>Income for Selected Year</h3>
+        <h3>Доход за выбранный год</h3>
         <select id="filterYear"></select>
-        <button id="calcIncomeYearBtn" style="margin-top: 10px;">Calculate</button>
-        <p>Income for the year: <span id="incomeYearResult">0</span></p>
+        <button id="calcIncomeYearBtn" style="margin-top: 10px;">Рассчитать</button>
+        <p>Доход за год: <span id="incomeYearResult">0</span></p>
       </div>
 
       <!-- Table with entries -->
       <table>
         <thead>
           <tr>
-            <th>Type</th>
-            <th>Flow</th>
-            <th>Date</th>
-            <th>Name</th>
-            <th>Quantity</th>
-            <th>Amount</th>
-            <th>Delete</th>
+            <th>Тип</th>
+            <th>Доход/Расход</th>
+            <th>Дата</th>
+            <th>Название</th>
+            <th>Количество</th>
+            <th>Сумма</th>
+            <th>Удалить</th>
           </tr>
         </thead>
         <tbody id="entryTable"></tbody>
@@ -312,61 +312,61 @@
   <!-- Tab: Rental -->
   <div id="rental" class="tab-content">
     <div class="container">
-  <h2>Rental</h2>
+  <h2>Аренда</h2>
       <form id="rentalForm">
-        <label>First Name:
+        <label>Имя:
           <input type="text" id="rentalName" required>
         </label>
-        <label>Last Name:
+        <label>Фамилия:
           <input type="text" id="rentalSurname" required>
         </label>
-        <label>Phone:
+        <label>Телефон:
           <input type="text" id="rentalPhone" required>
         </label>
-        <label>Passport Series:
+        <label>Серия паспорта:
           <input type="text" id="rentalPassport" required>
         </label>
-        <label>Date of Birth:
+        <label>Дата рождения:
           <input type="date" id="rentalBirth" required>
         </label>
-        <label>Date Given:
+        <label>Дата выдачи:
           <input type="date" id="rentalBikeGiven" required>
         </label>
-        <label>Rental Period:
+        <label>Срок аренды:
           <input type="number" id="rentalDuration" required>
           <select id="rentalUnit">
-            <option value="minutes">Minutes</option>
-            <option value="hours">Hours</option>
-            <option value="days">Days</option>
+            <option value="minutes">Минуты</option>
+            <option value="hours">Часы</option>
+            <option value="days">Дни</option>
           </select>
         </label>
-        <label>Rental Payment Date:
+        <label>Дата оплаты аренды:
           <input type="date" id="rentalPaymentDate">
         </label>
-        <label>Rental Amount:
+        <label>Сумма аренды:
           <input type="number" id="rentalAmount" required>
         </label>
         <div class="checkbox-group">
-          <label><input type="checkbox" id="rentalPaid"> Payment Received</label>
-          <label><input type="checkbox" id="rentalActive" checked> Rental Active</label>
+          <label><input type="checkbox" id="rentalPaid"> Оплата получена</label>
+          <label><input type="checkbox" id="rentalActive" checked> Аренда активна</label>
         </div>
-        <button type="submit">Save Rental</button>
+        <button type="submit">Сохранить аренду</button>
       </form>
 
       <table id="rentalTable">
         <thead>
           <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Phone</th>
-            <th>Passport</th>
-            <th>Date Given</th>
-            <th>Period</th>
-            <th>Rental Amount</th>
-            <th>Payment Date</th>
-            <th>Paid</th>
-            <th>Active</th>
-            <th>Delete</th>
+            <th>Имя</th>
+            <th>Фамилия</th>
+            <th>Телефон</th>
+            <th>Паспорт</th>
+            <th>Дата выдачи</th>
+            <th>Период</th>
+            <th>Сумма аренды</th>
+            <th>Дата оплаты</th>
+            <th>Оплачено</th>
+            <th>Активна</th>
+            <th>Удалить</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -377,44 +377,92 @@
   <!-- Tab: Warehouse -->
   <div id="warehouse" class="tab-content">
     <div class="container">
-  <h2>Warehouse</h2>
+  <h2>Склад</h2>
       <!-- Search block moved up -->
       <div class="search-box">
-        <label>Search:
-          <input type="text" id="searchInput" placeholder="Enter name...">
+        <label>Поиск:
+          <input type="text" id="searchInput" placeholder="Введите название...">
         </label>
       </div>
       <form id="stockForm">
-        <label>Name:
+        <label>Название:
           <input type="text" id="itemName" required>
         </label>
-        <label>Quantity:
+        <label>Количество:
           <input type="number" id="itemQty" required>
         </label>
-        <label>Size:
+        <label>Размер:
           <input type="text" id="itemSize">
         </label>
-        <label>Additional Info:
+        <label>Доп. информация:
           <input type="text" id="itemNote">
         </label>
-        <button type="submit">Add to Warehouse</button>
+        <button type="submit">Добавить на склад</button>
       </form>
 
       <table>
         <thead>
           <tr>
-            <th>Indicator</th>
-            <th>Name</th>
-            <th>Quantity</th>
-            <th>Size</th>
-            <th>Additional Info</th>
-            <th>Delete</th>
+            <th>Индикатор</th>
+            <th>Название</th>
+            <th>Количество</th>
+            <th>Размер</th>
+            <th>Доп. информация</th>
+            <th>Удалить</th>
           </tr>
         </thead>
         <tbody id="stockTable"></tbody>
       </table>
     </div>
   </div>
+
+
+    <script>
+    const API_URL = "https://YOUR-BACKEND-URL"; // change to your deployed server URL
+    
+    async function checkDeviceAccess() {
+      let deviceId = localStorage.getItem('deviceId');
+      if (!deviceId) {
+          // Generate a random device ID
+          deviceId = Math.random().toString(36).substring(2, 10).toUpperCase();
+          localStorage.setItem('deviceId', deviceId);
+          alert("New device detected! Approval code: " + deviceId + "\nSend this code to the app owner for approval.");
+      }
+    
+      try {
+          const res = await fetch(API_URL + "/check", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ deviceId })
+          });
+          const data = await res.json();
+          
+          if (!data.approved) {
+              document.body.innerHTML = `
+                  <div style="font-family: sans-serif; text-align: center; margin-top: 50px;">
+                      <h2>Access Denied</h2>
+                      <p>Your device is not approved to use this application.</p>
+                      <p>Approval code: <b>${deviceId}</b></p>
+                      <p>Please send this code to the application owner.</p>
+                  </div>
+              `;
+              throw new Error("Device not approved");
+          }
+      } catch (err) {
+          console.error("Error checking device:", err);
+          document.body.innerHTML = `
+              <div style="font-family: sans-serif; text-align: center; margin-top: 50px;">
+                  <h2>Server Error</h2>
+                  <p>Unable to verify license. Please try again later.</p>
+              </div>
+          `;
+          throw err;
+      }
+  }
+  
+  // Run check before loading rest of the app
+  checkDeviceAccess();
+  </script>
 
   <!-- Скрипт для переключения вкладок -->
   <script>
@@ -684,7 +732,7 @@
           <td>${item.phone}</td>
           <td>${item.passport}</td>
           <td>${item.bikeGiven}</td>
-          <td>${item.duration} ${item.durationUnit}</td>
+          <td>${item.duration} ${translateUnit(item.durationUnit)}</td>
           <td>${item.rentalAmount ? item.rentalAmount : 0}</td>
           <td>${item.paymentDate ? item.paymentDate : ''}</td>
           <td><input type="checkbox" onchange="toggleRentalPaid(${index}, this)" ${item.paid ? 'checked' : ''}></td>
@@ -693,6 +741,21 @@
         `;
         rentalTableBody.appendChild(row);
       });
+    }
+    function translateUnit(unit) {
+      switch (unit) {
+        case 'minutes':
+        case 'Минуты':
+          return 'Минуты';
+        case 'hours':
+        case 'Часы':
+          return 'Часы';
+        case 'days':
+        case 'Дни':
+          return 'Дни';
+        default:
+          return unit || '';
+      }
     }
     function deleteRental(index) {
       if (confirm("Удалить запись?")) {
@@ -777,4 +840,3 @@
   </script>
 </body>
 </html>
-
